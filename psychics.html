@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Physichs</title>
+</head>
+
+<body>
+  <p>Press any letter</p>
+  <div>
+    <label>Wins:</label>
+    <div id="wins"></div>
+
+    <label>Losses:</label>
+    <div id="losses"></div>
+
+    <label>Already guessed letters</label>
+    <div id="guessed_letters"></div>
+
+    <label>Remaining guesses</label>
+    <div id="remaining_guesses"></div>
+
+    <script src="./psychics.js"></script>
+  </div>
+
+  <script type="text/javascript">
+    let game = {
+        wins: 0,
+        losses: 0,
+        letters: 'abcdefghijklmnopqrstuvwxyz',
+        comp_choice: null,
+        guesses_remaining: 9,
+        guessed_letters: [],
+
+        set_random_letter: function() {
+            let index = Math.floor(Math.random() * this.letters.length)
+            this.comp_choice = this.letters[index]
+
+            console.log(this.comp_choice)
+        },
+
+        check_game: function (user_choice) {
+            if(user_choice == this.comp_choice){
+                alert("Yes, comp choice was: " + this.comp_choice + "You won!")
+                this.wins++;
+                return true;
+            }else if (this.guesses_remaining === 1) {
+                alert("Actually comp choice was: " + this.comp_choice + "You lost")
+                this.losses++;
+                return false;
+            }
+        },
+
+        restart_game: function () {
+            this.guesses_remaining = 9;
+            this.guessed_letters = [];
+            this.set_random_letter () ;
+        },
+
+        set_guessed_letter: function (letter) {
+            if(this.guessed_letters.indexOf(letter) === -1 ) {
+                this.guessed_letters.push(letter);
+                this/guesses_remaining--;
+            }
+        },
+
+        update_view: function () {
+            document.querySelector("#wins").innerHTML = this.wins;
+            document.querySelector("#losses").innerHTML = this.losses;
+            document.querySelector("#guessed_letters").innerHTML = this.guessed_letters;
+            document.querySelector("#remaining_guesses").innerHTML = this.remaining_guesses;
+        },
+    }
+
+    game.set_random_letter ();
+
+    document.onkeyup = function (event) {
+        let guessed_letter = event.key;
+
+        let cavab = game.check_game(guessed_letter)
+            if (cavab === true || cavab === false){
+                game.restart_game();
+            }else{
+                game.set_guessed_letter(guessed_letter)
+            }
+
+    game.update_view();
+    }
+
+  </script>
+
+</body>
+
+</html>
